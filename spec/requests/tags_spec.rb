@@ -50,6 +50,18 @@ describe "Tags" do
     end
   end
 
+  describe "DELETE /tags/:taggable_type/:taggable_id" do
+    it "deletes the entry" do
+      tag = create_tag
+
+      delete "/tags/#{tag.taggable_type}/#{tag.taggable_id}"
+
+      expect(response.status).to eq 204
+      expect(response.body).to eq ""
+      expect(Tag.count).to eq 0
+    end
+  end
+
   def request_params(attributes = {})
     {
       tag: {

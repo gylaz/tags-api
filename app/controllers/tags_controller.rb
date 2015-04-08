@@ -22,6 +22,16 @@ class TagsController < ApplicationController
     end
   end
 
+  def destroy
+    tag = Tag.where(
+      taggable_id: params[:taggable_id],
+      taggable_type: params[:taggable_type],
+    ).first
+    tag.destroy
+
+    render json: :none, status: :no_content
+  end
+
   private
 
   def tag_params
