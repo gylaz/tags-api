@@ -12,3 +12,5 @@ This is a simple app demonstrating the power of JSON APIs built on Rails.
 
 * `DELETE /tags/:taggable_type/:taggable_id` -- delete a record and its tags.
   Required params: `taggable_id`, `taggable_type`.
+
+* `GET /stats` -- fetch tag names and their counts.

@@ -62,6 +62,24 @@ describe "Tags" do
     end
   end
 
+  describe "GET /stats" do
+    it "returns stats of tag usage" do
+      tag1 = create_tag(taggable_id: 1, taggable_type: "Article", labels: ["ca", "co"])
+      tag2 = create_tag(taggable_id: 2, taggable_type: "Article", labels: ["ca", "ny"])
+      tag3 = create_tag(taggable_id: 2, taggable_type: "Product", labels: ["or", "ca", "co"])
+
+      get "/stats"
+
+      expect(response.status).to eq 200
+      expect(JSON.parse(response.body)).to match_array([
+        { "tag" => "ca", "count" => 3 },
+        { "tag" => "co", "count" => 2 },
+        { "tag" => "or", "count" => 1 },
+        { "tag" => "ny", "count" => 1 },
+      ])
+    end
+  end
+
   def request_params(attributes = {})
     {
       tag: {
@@ -72,11 +90,11 @@ describe "Tags" do
     }
   end
 
-  def create_tag
+  def create_tag(attributes = {})
     Tag.create!(
-      taggable_id: request_params[:tag][:taggable_id],
-      taggable_type: request_params[:tag][:taggable_type],
-      labels: ["la", "sf"],
+      taggable_id: attributes.fetch(:taggable_id, request_params[:tag][:taggable_id]),
+      taggable_type: attributes.fetch(:taggable_type, request_params[:tag][:taggable_type]),
+      labels: attributes.fetch(:labels, ["la", "sf"]),
     )
   end
 end

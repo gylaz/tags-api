@@ -13,7 +13,7 @@ class TagsController < ApplicationController
       taggable_id: tag_params[:taggable_id],
       taggable_type: tag_params[:taggable_type],
     ).first_or_initialize
-    @tag.labels = tag_params[:labels]
+    @tag.labels = tag_params[:labels].uniq
 
     if @tag.save
       render json: @tag, status: :created
