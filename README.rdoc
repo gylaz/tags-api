@@ -1,0 +1,3 @@
+== Tags API
+
+This is a simple app demonstrating the power of JSON APIs built on Rails.
