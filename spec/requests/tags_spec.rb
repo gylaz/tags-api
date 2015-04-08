@@ -6,7 +6,7 @@ describe "Tags" do
       it "creates a tag" do
         post "/tags", request_params
 
-        tag_attributes = JSON.parse(response.body)["tag"].except("id")
+        tag_attributes = JSON.parse(response.body).except("id")
         expect(response.status).to eq 201
         expect(Tag.count).to eq 1
         expect(tag_attributes).to eq(
@@ -20,11 +20,7 @@ describe "Tags" do
     context "when a tag for an entity already exist" do
       it "updates the entity" do
         new_labels = ["sf", "la"]
-        Tag.create!(
-          taggable_id: request_params[:tag][:taggable_id],
-          taggable_type: request_params[:tag][:taggable_type],
-          labels: ["one", "two"],
-        )
+        create_tag
 
         post "/tags", request_params(labels: new_labels)
 
@@ -39,6 +35,21 @@ describe "Tags" do
     end
   end
 
+  describe "GET /tags/:entity_type/:entity_id" do
+    it "returns entity info with tags" do
+      tag = create_tag
+
+      get "/tags", taggable_id: tag.taggable_id, taggable_type: tag.taggable_type
+
+      expect(response.status).to eq 200
+      expect(JSON.parse(response.body)).to eq({
+        "id" => tag.taggable_id,
+        "type" => tag.taggable_type,
+        "labels" => tag.labels,
+      })
+    end
+  end
+
   def request_params(attributes = {})
     {
       tag: {
@@ -47,5 +58,13 @@ describe "Tags" do
         labels: attributes.fetch(:labels, ["red", "white", "blue"]),
       }
     }
+  end
+
+  def create_tag
+    Tag.create!(
+      taggable_id: request_params[:tag][:taggable_id],
+      taggable_type: request_params[:tag][:taggable_type],
+      labels: ["la", "sf"],
+    )
   end
 end

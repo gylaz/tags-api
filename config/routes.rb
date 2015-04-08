@@ -1,3 +1,3 @@
 Rails.application.routes.draw do
-  resources :tags, only: [:create]
+  resources :tags, only: [:index, :create]
 end

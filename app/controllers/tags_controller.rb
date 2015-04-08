@@ -1,7 +1,18 @@
 class TagsController < ApplicationController
+  def index
+    @tag = Tag.where(
+      taggable_id: params[:taggable_id],
+      taggable_type: params[:taggable_type],
+    ).first
+
+    render json: @tag, serializer: EntitySerializer
+  end
+
   def create
-    @tag = Tag.where(tag_params[:entity_id], tag_params[:entity_type]).
-      first_or_initialize(tag_params)
+    @tag = Tag.where(
+      taggable_id: tag_params[:taggable_id],
+      taggable_type: tag_params[:taggable_type],
+    ).first_or_initialize
     @tag.labels = tag_params[:labels]
 
     if @tag.save
