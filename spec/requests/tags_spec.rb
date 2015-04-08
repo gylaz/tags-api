@@ -35,11 +35,11 @@ describe "Tags" do
     end
   end
 
-  describe "GET /tags/:entity_type/:entity_id" do
+  describe "GET /tags/:taggable_type/:taggable_id" do
     it "returns entity info with tags" do
       tag = create_tag
 
-      get "/tags", taggable_id: tag.taggable_id, taggable_type: tag.taggable_type
+      get "/tags/#{tag.taggable_type}/#{tag.taggable_id}"
 
       expect(response.status).to eq 200
       expect(JSON.parse(response.body)).to eq({

@@ -1,5 +1,5 @@
 class TagsController < ApplicationController
-  def index
+  def show
     @tag = Tag.where(
       taggable_id: params[:taggable_id],
       taggable_type: params[:taggable_type],
